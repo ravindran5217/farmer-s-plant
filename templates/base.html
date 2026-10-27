@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Farmer Plants{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="{% url 'marketplace:home' %}"><span class="brand-mark">✿</span> Farmer Plants</a>
+      <nav>
+        <a href="{% url 'marketplace:home' %}">Business</a>
+        <a href="{% url 'marketplace:trade' %}">Import / Export</a>
+        <a href="{% url 'marketplace:marketplace' %}">Farmer Stock</a>
+        <a class="nav-admin" href="/admin/">Admin</a>
+      </nav>
+    </div>
+  </header>
+
+  {% if messages %}
+    <div class="container messages">
+      {% for message in messages %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div><strong>Farmer Plants</strong><p>Fresh from the farm, closer to your home.</p></div>
+      <p>Demo project · Django + SQLite</p>
+    </div>
+  </footer>
+</body>
+</html>

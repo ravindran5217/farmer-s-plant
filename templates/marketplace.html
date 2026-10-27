@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Farmer Stock | Farmer Plants{% endblock %}
+{% block content %}
+<section class="page-banner marketplace-banner"><div class="container"><span class="eyebrow">FARMER-TO-CUSTOMER</span><h1>Fresh from the farmer</h1><p>Explore available produce and place a simple demo order directly through our marketplace.</p></div></section>
+<section class="section container">
+  <form class="filter-bar" method="get">
+    <input type="search" name="q" value="{{ search_query }}" placeholder="Search product, farmer or location..." aria-label="Search products">
+    <select name="category" aria-label="Filter category"><option value="">All produce</option><option value="Fruit" {% if selected_category == "Fruit" %}selected{% endif %}>Fruits</option><option value="Vegetable" {% if selected_category == "Vegetable" %}selected{% endif %}>Vegetables</option></select>
+    <button class="button button-primary" type="submit">Search</button>
+    <a class="button button-outline" href="{% url 'marketplace:marketplace' %}">Reset</a>
+  </form>
+  {% if products %}
+  <div class="product-grid market-grid">
+    {% for product in products %}
+    <article class="product-card market-card">
+      <div class="product-image">
+        {% if product.image_url %}<img src="{{ product.image_url }}" alt="{{ product.name }}">{% else %}<span>{% if product.category == "Fruit" %}🍎{% else %}🥦{% endif %}</span>{% endif %}
+        <span class="image-tag">{{ product.category }}</span>
+      </div>
+      <div class="product-info">
+        <h3>{{ product.name }}</h3><p class="muted">Farmer: {{ product.farmer_name }}</p><p class="muted">📍 {{ product.location }}</p>
+        {% if product.description %}<p class="description">{{ product.description }}</p>{% endif %}
+        <div class="stock-line"><strong>₹{{ product.price }} <small>/ {{ product.unit }}</small></strong><span>{{ product.quantity }} {{ product.unit }} available</span></div>
+        <form class="order-form" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="product_id" value="{{ product.id }}">
+          <label>Quantity ({{ product.unit }})</label>
+          <input type="number" name="quantity" min="0.01" max="{{ product.quantity }}" step="0.01" required placeholder="Quantity">
+          <label>Your name</label><input name="customer_name" required maxlength="100" placeholder="Full name">
+          <label>Phone number</label><input name="phone" required maxlength="20" type="tel" placeholder="Contact number">
+          <label>Delivery address</label><textarea name="address" required rows="2" placeholder="Delivery address"></textarea>
+          <button class="button button-primary button-full" type="submit">Place order</button>
+        </form>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="empty-state"><div>🧺</div><h3>No products found</h3><p>Add products in Django Admin or try another search.</p><a class="button button-primary" href="/admin/">Manage products</a></div>
+  {% endif %}
+</section>
+{% endblock %}

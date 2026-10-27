@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed | Farmer Plants{% endblock %}
+{% block content %}
+<section class="section container">
+  <div class="success-card">
+    <div class="success-icon">✓</div><span class="eyebrow">ORDER RECEIVED</span><h1>Thank you, {{ order.customer_name }}!</h1>
+    <p>Your demo order has been recorded successfully.</p>
+    <div class="order-summary">
+      <div><span>Order number</span><strong>#{{ order.id }}</strong></div>
+      <div><span>Product</span><strong>{{ order.product.name }}</strong></div>
+      <div><span>Quantity</span><strong>{{ order.quantity }} {{ order.product.unit }}</strong></div>
+      <div><span>Total</span><strong>₹{{ order.total_price }}</strong></div>
+      <div><span>Status</span><strong>{{ order.status }}</strong></div>
+    </div>
+    <p class="muted">This is a demonstration project; no online payment has been taken.</p>
+    <a class="button button-primary" href="{% url 'marketplace:marketplace' %}">Back to marketplace</a>
+  </div>
+</section>
+{% endblock %}
